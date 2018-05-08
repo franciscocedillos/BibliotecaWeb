@@ -29,18 +29,18 @@
                             out.println("</form>");
                             String buscar = request.getParameter("buscar");
                             try {
-                                String consulta = "SELECT a.proIsbn, a.ProNombre, p.autNombre, p.autApellido FROM Producto a INNER JOIN ProductoAutor ap ON ap.proId = a.proId INNER JOIN Autor p ON p.autId = ap.autId WHERE a.proNombre LIKE '%" + buscar + "%' OR p.autNombre LIKE '%" + buscar + "%' OR p.autApellido LIKE '%" + buscar + "%' GROUP BY a.proIsbn";
+                                String consulta = "SELECT a.proIsbn, a.ProNombre, CONCAT(p.autNombre, ' ', p.autApellidO) AS nombreAutor FROM Producto a INNER JOIN ProductoAutor ap ON ap.proId = a.proId INNER JOIN Autor p ON p.autId = ap.autId WHERE a.proNombre LIKE '%" + buscar + "%' OR p.autNombre LIKE '%" + buscar + "%' OR p.autApellido LIKE '%" + buscar + "%' GROUP BY a.proIsbn";
                                 st = conexion.prepareStatement(consulta);
                                 rs = st.executeQuery();
                                 out.println("<br />Resultados de la búsqueda:<br />");
                                 out.println("<table class='table table-striped table-bordered table-hover'><tr>");
-                                out.println("<th>ISBN</th><th>Título</th><th>Nombre</th><th>Apellido</th></tr>");
+                                out.println("<th>ISBN</th><th>Título</th><th>Nombre del autor</th><th>Operaciones</th></tr>");
                                 while (rs.next()) {
                                     out.println("<tr>");
                                     out.println("<td>" + rs.getString("proIsbn") + "</td>");
                                     out.println("<td>" + rs.getString("ProNombre") + "</td>");
-                                    out.println("<td>" + rs.getString("autNombre") + "</td>");
-                                    out.println("<td>" + rs.getString("autApellido") + "</td>");
+                                    out.println("<td>" + rs.getString("nombreAutor") + "</td>");
+                                    out.println("<td><a href='#'><input type='submit' class='btn btn-primary btn-warning' name='detalles' value='Detalles' /></a></td>");
                                     out.println("</tr>");
                                 };
                                 out.println("</table>");
